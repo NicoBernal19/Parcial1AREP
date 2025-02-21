@@ -3,7 +3,6 @@ package edu.eci.arep;
 import java.net.*;
 import java.io.*;
 
-import static edu.eci.arep.HttpConnection.Response;
 public class CalculatorServer {
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = null;
@@ -27,61 +26,26 @@ public class CalculatorServer {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(clientSocket.getInputStream()));
             String inputLine, outputLine;
-            boolean isFline = true;
-            String Fline = " ";
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Recibí: " + inputLine);
-                if (isFline = true) {
-                    Fline = inputLine;
-                    isFline = false;
-                }
                 if (!in.ready()) {
                     break;
                 }
             }
+            outputLine = "HTTP/1.1 200 OK\r\n"
+                    + "Content-Type: json/application\r\n"
+                    + "\r\n"
+                    + "<!DOCTYPE html>\n"
+                    + "<html>\n"
+                    + "<head>\n"
+                    + "<meta charset=\"UTF-8\">\n"
+                    + "<title>Compreflex</title>\n"
+                    + "</head>\n"
+                    + "<body>\n"
+                    + "<h1>API Calculadora</h1>\n"
+                    + "</body>\n"
+                    + "</html>\n";
 
-            String res = Response(Fline);
-            if (res.split(" ")[1].startsWith("/compreflex")) {
-                outputLine =
-                        "HTTP/1.1 200 OK\r\n"
-                                + "Content-Type: application/json\r\n"
-                                + "\r\n"
-                                + "<!DOCTYPE html>\n"
-                                + "<html>\n"
-                                + "<head>\n"
-                                + "<meta charset=\"UTF-8\">\n"
-                                + "<title>Compreflex</title>\n"
-                                + "</head>\n"
-                                + "<body>\n"
-                                + "<h1>Form with GET</h1>\n"
-                                + "</body>\n"
-                                + "</html>\n";
-                out.println(outputLine);
-                out.close();
-                in.close();
-                clientSocket.close();
-                serverSocket.close();
-            } else {
-                outputLine =
-                        "HTTP/1.1 200 OK\r\n"
-                                + "Content-Type: text/html\r\n"
-                                + "\r\n"
-                                + "<!DOCTYPE html>\n"
-                                + "<html>\n"
-                                + "<head>\n"
-                                + "<meta charset=\"UTF-8\">\n"
-                                + "<title>Error</title>\n"
-                                + "</head>\n"
-                                + "<body>\n"
-                                + "<h1>Method Not Found</h1>\n"
-                                + "</body>\n"
-                                + "</html>\n";
-                out.println(outputLine);
-                out.close();
-                in.close();
-                clientSocket.close();
-                serverSocket.close();
             }
         }
     }
-}
