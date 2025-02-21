@@ -3,6 +3,8 @@ package edu.eci.arep;
 import java.net.*;
 import java.io.*;
 
+import static edu.eci.arep.HttpConnection.Response;
+
 public class FacadeServer {
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = null;
@@ -39,29 +41,66 @@ public class FacadeServer {
                 }
             }
 
-            outputLine =
-                    "HTTP/1.1 200 OK\r\n"
-                            + "Content-Type: text/html\r\n"
-                            + "\r\n"
-                            + "<!DOCTYPE html>\n"
-                            + "<html>\n"
-                            + "<head>\n"
-                            + "<meta charset=\"UTF-8\">\n"
-                            + "<title>Title of the document</title>\n"
-                            + "</head>\n"
-                            + "<body>\n"
-                            + "<h1>Form with GET</h1>\n"
-                            + "</body>\n"
-                            + "</html>\n";
-            out.println(outputLine);
-            out.close();
-            in.close();
-            clientSocket.close();
-            serverSocket.close();
+            String res = Response(Fline);
+
+            if (res.split(" ")[1].startsWith("/cliente")){
+                outputLine =
+                        "HTTP/1.1 200 OK\r\n"
+                                + "Content-Type: text/html\r\n"
+                                + "\r\n"
+                                + "<!DOCTYPE html>\n"
+                                + "<html>\n"
+                                + "<head>\n"
+                                + "<meta charset=\"UTF-8\">\n"
+                                + "<title>Index</title>\n"
+                                + "</head>\n"
+                                + "<body>\n"
+                                + "<h1>Form with GET</h1>\n"
+                                + "<form action=/hello>\n"
+                                + "<label for=\"name\">Name:</label><br>\n"
+                                + "<input type=text id=comando name=comando><br><br>\n"
+                                + "<input type=button value=Submit onclick=loadGetMsg()>\n"
+                                + "</form>\n"
+                                + "<div id=\"getrespmsg\"></div>\n"
+                                + "<script>\n"
+                                + "function loadGetMsg() {\n"
+                                + "let nameVar = document.getElementById(\"name\").value;\n"
+                                + "const xhttp = new XMLHttpRequest();\n"
+                                + "xhttp.onload = function() {\n"
+                                + "document.getElementById(\"getrespmsg\").innerHTML =\n"
+                                + "this.responseText;\n"
+                                + "}\n"
+                                + "xhttp.open(\"GET\", \"/hello?name=\"+nameVar);\n"
+                                + "xhttp.send();\n"
+                                + "}\n"
+                                + "</script>\n"
+                                + "</body>\n"
+                                + "</html>\n";
+                out.println(outputLine);
+                out.close();
+                in.close();
+                clientSocket.close();
+                serverSocket.close();
+            } else if (res.split(" ")[1].startsWith("/consulta")){
+                outputLine = "HTTP/1.1 200 OK\r\n"
+                        + "Content-Type: json/application\r\n"
+                        + "\r\n"
+                        + "<!DOCTYPE html>\n"
+                        + "<html>\n"
+                        + "<head>\n"
+                        + "<meta charset=\"UTF-8\">\n"
+                        + "<title>Consulta</title>\n"
+                        + "</head>\n"
+                        + "<body>\n"
+                        + "<h1>Mi propio mensaje</h1>\n"
+                        + "</body>\n"
+                        + "</html>\n";
+                out.println(outputLine);
+                out.close();
+                in.close();
+                clientSocket.close();
+                serverSocket.close();
+            }
+        }
         }
     }
-    public static String getRqUrl(URL url){
-        String res = url.getPath().split(" ")[1];
-        return res;
-    }
-}

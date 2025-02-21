@@ -8,11 +8,11 @@ import java.net.URL;
 
 public class HttpConnection {
     private static final String USER_AGENT = "Mozilla/5.0";
-    private static final String GET_URL = "https://localhost:35000";
+    public static final String GET_URL = "https://localhost:35000";
 
     public static String Response(String res) throws IOException {
 
-        URL obj = new URL(GET_URL);
+        URL obj = new URL(GET_URL + res);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("User-Agent", USER_AGENT);
