@@ -1,6 +1,5 @@
 package edu.eci.arep;
 
-import javax.print.DocFlavor;
 import java.net.*;
 import java.io.*;
 
@@ -41,21 +40,28 @@ public class FacadeServer {
             }
 
             outputLine =
-                    "<!DOCTYPE html>" +
-                            "<html>" +
-                            "<head>" +
-                            "<meta charset=\"UTF-8\">" +
-                            "<title>Title of the document</title>\n" +
-                            "</head>" +
-                            "<body>" +
-                            "<h1>Mi propio mensaje</h1>" +
-                            "</body>" +
-                            "</html>";
+                    "HTTP/1.1 200 OK\r\n"
+                            + "Content-Type: text/html\r\n"
+                            + "\r\n"
+                            + "<!DOCTYPE html>\n"
+                            + "<html>\n"
+                            + "<head>\n"
+                            + "<meta charset=\"UTF-8\">\n"
+                            + "<title>Title of the document</title>\n"
+                            + "</head>\n"
+                            + "<body>\n"
+                            + "<h1>Form with GET</h1>\n"
+                            + "</body>\n"
+                            + "</html>\n";
             out.println(outputLine);
             out.close();
             in.close();
             clientSocket.close();
             serverSocket.close();
         }
+    }
+    public static String getRqUrl(URL url){
+        String res = url.getPath().split(" ")[1];
+        return res;
     }
 }
